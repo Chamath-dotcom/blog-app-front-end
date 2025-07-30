@@ -1,0 +1,39 @@
+
+.icon{
+    width: 3vw;
+    height: 3vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    color: black;
+    font-size: larger;
+    border-radius: 20%;
+    &:hover{
+        background-color: #808080;
+        cursor: pointer;
+        color: white;
+        
+        
+    }
+}
+#logout{
+    border-radius: 100%;
+}
+.backg{
+    
+    background-image: url("/bg/bg-03.jpg");
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    
+   
+
+    
+}
+*{
+    color: white;
+}
+
+

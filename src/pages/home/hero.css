@@ -1,0 +1,40 @@
+.main{
+    position: absolute;
+    top: 4.1vh;
+}
+
+
+.img-div{
+    background-image: url('../public/hero_img\ \(3\)\ 1\ \(1\).svg');
+    background-repeat: no-repeat;
+
+    width: 96vw;
+    height: 50vh;
+   
+    z-index: 0;
+    /* border: 1px solid black; */
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0);
+    filter: contrast(1);
+
+    font-family: "Abril Fatface", serif;
+   
+}
+.main-title{
+   
+    font-weight: 550;
+    font-style: normal;
+    font-size: 4.5em;
+    line-height: 01;
+    
+}
+.discription{
+    font-family: "Afacad Flux", serif;
+    font-weight: 600;
+    font-size: 2.3em;
+    line-height: 01.5;
+
+    border-radius: 200px 20px 20px 200px;
+    
+}
