@@ -2,28 +2,109 @@ import { useEffect, useState } from "react";
 import LoginBtn from "../pages/home/loginBtn/loginBtn";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import AddPostButton from "./AddPostButton";
 
-export default function UserStatus() {
+export default function UserStatus({ author }) {
   const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({});
   const [profilePicFile, setProfilePicFile] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setUser(decoded);
-        setForm(decoded);
-      } catch {
+    // If author prop is present, fetch that user's info from backend
+    if (author) {
+      fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users?author=${encodeURIComponent(
+          author
+        )}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          // Expecting backend to return user object for this author
+          setUser(data.user || null);
+          setForm(data.user || {});
+          setFollowers(data.user?.followers || []);
+          setFollowing(data.user?.following || []);
+        })
+        .catch(() => setUser(null));
+    } else {
+      // Fetch logged-in user from backend
+      const token = localStorage.getItem("token");
+      if (token) {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            setUser(data.user || null);
+            setForm(data.user || {});
+            setFollowers(data.user?.followers || []);
+            setFollowing(data.user?.following || []);
+          })
+          .catch(() => setUser(null));
+      } else {
         setUser(null);
       }
-    } else {
-      setUser(null);
     }
-  }, []);
+  }, [author]);
+
+  useEffect(() => {
+    // Check if logged-in user is following this author
+    const token = localStorage.getItem("token");
+    if (token && user && user.followers) {
+      try {
+        const decoded = jwtDecode(token);
+        setIsFollowing(user.followers.includes(decoded.email));
+        setFollowing(decoded.following || []);
+      } catch {}
+    }
+  }, [user]);
+
+  const handleFollow = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/users/follow`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ author }),
+      }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      setIsFollowing(true);
+      setFollowers(data.followers);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/users/unfollow`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ author }),
+      }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      setIsFollowing(false);
+      setFollowers(data.followers);
+    }
+  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -64,7 +145,7 @@ export default function UserStatus() {
 
   if (editMode) {
     return (
-      <aside className="w-[100vw] max-w-xs flex flex-col items-center bg-black text-white border-l min-h-[90vh] py-10 px-6 shadow-sm rounded-xl">
+      <aside className="w-[100vw] max-w-xs flex flex-col items-center border-l min-h-[90vh] py-10 px-6 shadow-sm rounded-xl ">
         <form
           onSubmit={handleUpdate}
           className="flex flex-col items-center gap-3 w-full"
@@ -88,7 +169,7 @@ export default function UserStatus() {
             onChange={(e) => setProfilePicFile(e.target.files[0])}
           />
           <input
-            className="text-black px-2 py-1 rounded"
+            className="text-white px-2 py-1 rounded"
             value={form.firstName || ""}
             onChange={(e) =>
               setForm((f) => ({ ...f, firstName: e.target.value }))
@@ -136,49 +217,63 @@ export default function UserStatus() {
   }
 
   return (
-    <aside className="w-[100vw] max-w-xs flex flex-col items-center bg-black text-white border-l min-h-[90vh] py-10 px-6 shadow-sm rounded-xl">
-      <img
-        src={
-          user.profilePicture
-            ? user.profilePicture.startsWith("http")
-              ? user.profilePicture
-              : `${import.meta.env.VITE_BACKEND_URL}/uploads/${user.profilePicture}`
-            : "/user-profile-icon.svg"
-        }
-        alt="profile"
-        className="w-24 h-24 rounded-full mb-4 border object-cover"
-      />
-      <h2 className="text-xl font-bold mb-1 text-gray-900">
-        {user.firstName || ""} {user.lastName || ""}
-      </h2>
-      <span className="text-gray-600 mb-2">{user.email}</span>
-      <button
-        className="text-green-700 text-sm mb-6 hover:underline"
-        onClick={() => setEditMode(true)}
-      >
-        Edit profile
-      </button>
-      <div className="w-full flex flex-col gap-2 text-sm text-gray-700">
-        {user.phone && (
-          <div>
-            <span className="font-semibold">Phone:</span> {user.phone}
+    <aside className="w-[100vw] max-w-xs flex flex-col items-center justify-between bg-[#222222d8] text-white border-l h-[70vh] py-10 px-6 shadow-sm rounded-xl mr-10">
+      <div className="flex flex-col items-center">
+        <img
+          src={
+            user.profilePicture
+              ? user.profilePicture.startsWith("http")
+                ? user.profilePicture
+                : `${import.meta.env.VITE_BACKEND_URL}/uploads/${user.profilePicture}`
+              : "/user-profile-icon.svg"
+          }
+          alt="profile"
+          className="w-24 h-24 rounded-full mb-4 border object-cover"
+        />
+        <h2 className="text-xl font-bold mb-1 text-gray-100">
+          {user.firstName || ""} {user.lastName || ""}
+        </h2>
+        <span className="text-[#777777]">{user.email}</span>
+        <button
+          className="text-green-700 text-sm mb-6 hover:underline"
+          onClick={() => setEditMode(true)}
+        >
+          Edit profile
+        </button>
+        <AddPostButton />
+        {author && (
+          <div className="my-2">
+            {isFollowing ? (
+              <button
+                className="bg-gray-400 text-white px-4 py-1 rounded"
+                onClick={handleUnfollow}
+              >
+                Unfollow
+              </button>
+            ) : (
+              <button
+                className="bg-blue-600 text-white px-4 py-1 rounded"
+                onClick={handleFollow}
+              >
+                Follow
+              </button>
+            )}
           </div>
         )}
-        {user.role && (
-          <div>
-            <span className="font-semibold">Role:</span> {user.role}
-          </div>
-        )}
+        <div className="flex gap-4 mt-2">
+          <span>Followers: {followers.length}</span>
+          <span>Following: {following.length}</span>
+        </div>
       </div>
-      <button
-        className="mt-8 px-4 py-2 bg-red-500 text-white rounded w-full"
-        onClick={() => {
-          localStorage.removeItem("token");
-          navigate("/");
-        }}
-      >
-        Logout
-      </button>
+      <div className=" mt-6 pt-4 w-full flex justify-between items-center mb-10 border-2 border-transparent">
+        <LoginBtn
+          text="LOGOUT"
+          onClick={() => {
+            localStorage.removeItem("token");
+            navigate("/");
+          }}
+        />
+      </div>
     </aside>
   );
 }

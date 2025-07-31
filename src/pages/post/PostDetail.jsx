@@ -149,7 +149,10 @@ export default function PostDetail() {
       <article className="w-full max-w-3xl bg-white mx-auto shadow-lg rounded-xl">
         {/* User Name Above Post */}
         <div className="px-8 pt-8 pb-2 flex items-center gap-3">
-          <span className="text-lg font-semibold text-gray-700">
+          <span
+            className="text-lg font-semibold text-blue-700 hover:underline cursor-pointer"
+            onClick={() => navigate(`/profile/${encodeURIComponent(post.author)}`)}
+          >
             {post.author || "Unknown"}
           </span>
         </div>

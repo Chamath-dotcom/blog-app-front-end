@@ -79,7 +79,7 @@ export default function Login(){
                           
                         </button>
                         <div className="w-[15vw] h-[6vh]  flex justify-start absolute bottom-10">
-                            <LoginBtn/>
+                            <LoginBtn text="LOGIN" />
                         </div>
                     </div>
                     </form>

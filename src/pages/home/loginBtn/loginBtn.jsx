@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import'./loginBtn.css'
 
-export default function LoginBtn({ text = "LOGIN", onClick }) {
+export default function LoginBtn({ text = "**", onClick , path = "/login"}) {
     const navigate = useNavigate();
     const handleClick = () => {
       if (onClick) {
         onClick(); 
       } else {
-        navigate("/login");
+        navigate(path);
       }
     };
     return(

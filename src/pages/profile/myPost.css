@@ -1,0 +1,21 @@
+/* For Chrome, Edge, Safari */
+.my-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+  border-radius: 8px;
+}
+
+.my-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.my-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
+
+/* For Firefox */
+.my-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}

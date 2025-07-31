@@ -45,7 +45,13 @@ export default function AdminUserList() {
               <tr key={user._id} className="border-b hover:bg-gray-50">
                 <td className="py-2 px-4">
                   <img
-                    src={user.profilePicture}
+                    src={
+                      user.profilePicture
+                        ? user.profilePicture.startsWith("http")
+                          ? user.profilePicture
+                          : `${import.meta.env.VITE_BACKEND_URL}/uploads/${user.profilePicture}`
+                        : "/user-profile-icon.svg"
+                    }
                     alt="profile"
                     className="w-10 h-10 rounded-full object-cover border"
                   />
