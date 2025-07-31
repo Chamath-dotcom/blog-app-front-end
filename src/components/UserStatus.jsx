@@ -136,6 +136,14 @@ export default function UserStatus({ author }) {
   };
 
   if (!user) {
+    if (author) {
+      return (
+        <aside className="w-[100vw] max-w-xs flex flex-col items-center border-l min-h-[90vh] py-10 px-6 shadow-sm rounded-xl ">
+          <div className="text-gray-400">User not found.</div>
+        </aside>
+      );
+    }
+    // Only show login if not viewing another user's profile
     return (
       <div className="mt-8">
         <LoginBtn text="LOGIN" />
