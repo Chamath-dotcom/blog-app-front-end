@@ -12,24 +12,26 @@ export default function Register(){
     const [lastName, setLastName] = useState("");
     const [phone, setPhone] = useState("");
     const [address, setAddress] = useState("");
+    const [profilePicture, setProfilePicture] = useState(null);
     const navigate = useNavigate();
    
-    function handleOnsubmit(e){
-        console.log(
-            "Email:",email,
-            "Password:",password,
-            "First Name:",firstName,
-            "Last Name:",lastName,
-            "Phone:",phone,
-            "Address:",address
-        )
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/register`,{
-            email: email,
-            password: password,
-            firstName: firstName,
-            lastName: lastName,
-            phone: phone,
-            address: address
+    const handleOnSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("firstName", firstName);
+        formData.append("lastName", lastName);
+        formData.append("phone", phone);
+        formData.append("address", address);
+        if (profilePicture) {
+            formData.append("profilePicture", profilePicture);
+        }
+
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/register`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         }).then((res)=>{
             console.log(res);
             toast.success("Registration Success");
@@ -49,7 +51,7 @@ export default function Register(){
             <div className=" w-[30vw] h-[100vw] absolute top-0 right-100 flex flex-col justify-center items-center  ">
                 <img src="../public/login/lamp.png" alt="lamp" className=" h-fit absolute top-0 " />
                 <div className="form  rounded-3xl flex items-center justify-center absolute top-40 backdrop-blur-sm  " >
-                    <form onSubmit={handleOnsubmit}>
+                    <form onSubmit={handleOnSubmit} encType="multipart/form-data">
                     <div className=" w-[60vw] h-[70vh]   flex justify-start items-center flex-col gap-6  relative ">
                        
                         <img
@@ -108,6 +110,14 @@ export default function Register(){
                                 onChange={(e) => setAddress(e.target.value)}
                             />
                         </div>
+                        <div className=" w-[60vw] h-[10vh] flex flex-col justify-center items-center gap-4 relative top-30">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={e => setProfilePicture(e.target.files[0])}
+                                className="mt-6 w-[25vw] h-[5vh] bg-transparent border-b-2 border-white text-white text-xl outline-none"
+                            />
+                        </div>
                         <div className="w-[15vw] h-[6vh]  flex justify-start absolute bottom-10">
                             <LoginBtn/>
                         </div>
@@ -117,4 +127,12 @@ export default function Register(){
         </div>
         </div>
     )
+}
+
+export async function registerUser(req, res) {
+  const userData = req.body;
+  if (req.file) {
+    userData.profilePicture = req.file.filename;
+  }
+  // ...rest of your code
 }

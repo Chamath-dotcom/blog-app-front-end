@@ -7,6 +7,8 @@ import "./admin.css"
 import AdminItem from "./adminItem";
 import AddItem from "./additem";
 import UpdateItem from "./updateItem";
+import AdminUserList from "./user";
+
 
 export default function AdminPage() {
   return (
@@ -59,7 +61,8 @@ export default function AdminPage() {
           <Route path="/items" element={<AdminItem/>} />
           <Route path="/items/add" element={<AddItem/>} />
           <Route path="/items/edit" element={<UpdateItem/>} />
-          <Route path="/users" element={<h1>Users</h1>} />
+          <Route path="/users" element={<AdminUserList />} />
+          
         </Routes>
       </div>
     </div>

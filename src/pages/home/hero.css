@@ -5,7 +5,7 @@
 
 
 .img-div{
-    background-image: url('../public/hero_img\ \(3\)\ 1\ \(1\).svg');
+    background-image: url('../public/hero_img\ \(3\)\ 1\ \(1\).png');
     background-repeat: no-repeat;
 
     width: 96vw;
@@ -37,4 +37,13 @@
 
     border-radius: 200px 20px 20px 200px;
     
+}
+.typewriter h1 {
+  overflow: hidden; /* Ensures text is hidden as it’s being typed */
+  border-right: 3px solid white; /* Creates the blinking cursor effect */
+  white-space: nowrap; /* Prevents text from wrapping */
+  margin: 0 auto; /* Centers the text horizontally */
+  letter-spacing: 0.15em; /* Adjusts space between letters */
+  animation: typing 5s steps(30, end), blink-caret 0.75s step-end infinite;
+  animation-delay: 1s;
 }

@@ -1,13 +1,13 @@
 import Header from "../../components/header";
 import Hero from "./heroSec";
-import UserStatus from "../../components/UserStatus"; // <-- Import the new component
+import UserStatus from "../../components/UserStatus";
+import PostList from "../../components/PostList"; // <-- Import
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-[#1f1436] w-[100vw] h-[340vh]">
       <Hero />
-   
-      <UserStatus /> {/* <-- Use the new component here */}
+      <PostList /> {/* <-- Add here */}
     </div>
   );
 }

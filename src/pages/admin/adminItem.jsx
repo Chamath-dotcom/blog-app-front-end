@@ -1,116 +1,69 @@
-import { Link, Route, Routes, useNavigate } from "react-router-dom"
-import { IoAddCircle } from "react-icons/io5"
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import './Item.css'
 
-export default function AdminItem(){
-    const navigate = useNavigate();
-    const [items, setItems] = useState([]);
-    const [itemloaded, setItemloaded] = useState(false);
-    
-    useEffect(() => {
-        if(!itemloaded) {
-            const token = localStorage.getItem("token");
-             axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/product/getproducts`, {
-            headers: { Authorization: `Bearer ${token}` }
-        }).then((res) => {
-            console.log(res.data.message);
-            setItems(res.data.message); // Use res.data.message instead of res.data
-            setItemloaded(true);
-        }).catch((err) => {
-            console.log(err);
-        });
-        }
-        
-    }, [itemloaded]);
+export default function AdminItem() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const handleDelete = (key) => {
-        if (window.confirm("Are you sure you want to delete this item?")) {
-            console.log("Key to delete:", key); // Log the key being used
-            setItems(items.filter((item) => item.prod_key !== key));
-            const token = localStorage.getItem("token");
-            axios
-                .delete(`${import.meta.env.VITE_BACKEND_URL}/api/product/deleteProduct/${key}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                .then((res) => {
-                    console.log(res.data);
-                   setItemloaded(false);
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
-    };
-    
-    return(
-    <div className="w-[96vw] h-[100vh]  ">
-            {! itemloaded && ( 
-            <div className="  w-[100vw] h-[5vw] flex items-center justify-center">
-				<section className="border-4 my-4 border-b-green-500 rounded-full animate-spin bg-0 w-[4vw] h-[4vw]"></section>
-              </div>
-             )} 
-           <div className="  w-[100vw] h-[calc(100vh-4vw)] flex flex-col justify-start items-center relative right-10 ">
-            {/* Header Section */}
-            <div className=" border w-[85vw] h-[6vh] flex justify-center items-center mt-3 mb-4 backdrop-blur-2xl p-4 rounded-lg ">
-                <h2 className="text-2xl font-semibold text-white">Admin Item List</h2>
-            </div>
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setPosts(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
-            {/* Table */}
-            <div className="overflow-x-auto overflow-y-auto backdrop-blur-2xl p-4 rounded-lg shadow-md text-black border ">
-                <table className="w-[87vw] border-collapse border ">
-                    <thead className="bg-gray-800">
-                        <tr>
-                            <th className="border px-4 py-2">Key</th>
-                            <th className="border px-4 py-2">Name</th>
-                            <th className="border px-4 py-2">Price</th>
-                            <th className="border px-4 py-2">Category</th>
-                            <th className="border px-4 py-2">Dimensions</th>
-                            <th className="border px-4 py-2">Availability</th>
-                            <th className="border px-6 py-2">Actions</th> 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map((product) => {
-                            return(
-                            <tr key={product.prod_key} className="text-center hover:bg-gray-400 transition">
-                                <td className="border px-4 py-2">{product.prod_key}</td>
-                                <td className="border px-4 py-2">{product.name}</td>
-                                <td className="border px-4 py-2">{product.price}</td>
-                                <td className="border px-4 py-2">{product.category}</td>
-                                <td className="border px-4 py-2">{product.dimensions}</td>
-                                <td className="border px-4 py-2">
-                                    {product.availability ? "Available" : "Not Available"}
-                                </td>
-                                <td className="p-1.5 border flex justify-around ">
-                                    <button 
-                                        onClick={() => {
-                                            navigate(`/admin/items/edit`, {state:product});
-                                        }} 
-                                        className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition cursor-pointer">
-                                        <FaEdit className="inline mr-1" /> Edit
-                                    </button>
+  if (loading) {
+    return (
+      <div className="w-full flex justify-center items-center py-10">
+        <span className="text-lg text-gray-700">Loading posts...</span>
+      </div>
+    );
+  }
 
-                                    <button
-                                        onClick={() => handleDelete(product.prod_key)}
-                                        className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition cursor-pointer"
-                                    >
-                                        <FaTrashAlt className="inline mr-1" /> Delete
-                                    </button>
-                                </td>
-                            </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <Link to="/admin/items/add" className="fixed bottom-6 right-6">
-            <IoAddCircle className=" text-black bg-transparent rounded-2xl text-[60px]  hover:text-white hover:bg-[#808080]  transition duration-600 cursor-pointer" />
-        </Link>
+  return (
+    <div className="w-full max-w-6xl mx-auto mt-8 flex flex-col gap-6">
+      <h2 className="text-2xl font-bold mb-4 text-gray-900">All Posts</h2>
+      <div className="overflow-x-auto rounded shadow bg-white">
+        <table className="min-w-full text-left">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-2 px-4">Image</th>
+              <th className="py-2 px-4">Title</th>
+              <th className="py-2 px-4">Author</th>
+              <th className="py-2 px-4">Likes</th>
+              <th className="py-2 px-4">Comments</th>
+              <th className="py-2 px-4">Shares</th>
+              <th className="py-2 px-4">Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map(post => (
+              <tr key={post._id} className="border-b hover:bg-gray-50">
+                <td className="py-2 px-4">
+                  {post.image && (
+                    <img
+                      src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${post.image}`}
+                      alt="Post"
+                      className="w-16 h-12 object-cover rounded border"
+                    />
+                  )}
+                </td>
+                <td className="py-2 px-4 font-semibold">{post.title}</td>
+                <td className="py-2 px-4">{post.author}</td>
+                <td className="py-2 px-4">{Array.isArray(post.likes) ? post.likes.length : post.likes || 0}</td>
+                <td className="py-2 px-4">{post.comments ? post.comments.length : 0}</td>
+                <td className="py-2 px-4">{post.shares ? post.shares.length : 0}</td>
+                <td className="py-2 px-4">{new Date(post.createdAt).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-    )
+  );
 }
