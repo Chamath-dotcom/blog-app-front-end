@@ -13,7 +13,9 @@ export default function ProfilePage() {
       <div className="flex-1 h-[100vh] overflow-y-auto px-4 my-scrollbar ">
         <MyPost author={author} />
       </div>
+      <div className="w-[30vw] border-2">
       <UserStatus author={author} />
+      </div>
     </div>
   );
 }

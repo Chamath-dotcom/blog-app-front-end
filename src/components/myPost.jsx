@@ -37,7 +37,7 @@ export default function MyPost({ author }) {
   }
 
   return (
-    <div className="w-full flex max-w-3xl mx-auto mt-8 flex-col gap-8  relative left-[12vw] ">
+    <div className="w-full flex max-w-3xl mx-auto mt-8 flex-col gap-8  relative left-[2vw] ">
       {posts.map(post => (
         <div
           key={post._id}

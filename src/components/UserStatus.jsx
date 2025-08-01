@@ -163,7 +163,7 @@ export default function UserStatus({ author }) {
 
   if (editMode) {
     return (
-      <aside className="w-[100vw] max-w-xs flex flex-col items-center border-l min-h-[90vh] py-10 px-6 shadow-sm rounded-xl ">
+      <aside className="w-[100vw]  flex flex-col items-center border-l min-h-[90vh] py-10 px-6 shadow-sm rounded-xl ">
         <form
           onSubmit={handleUpdate}
           className="flex flex-col items-center gap-3 w-full"
