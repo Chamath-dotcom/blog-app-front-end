@@ -274,13 +274,16 @@ export default function UserStatus({ author }) {
         </div>
       </div>
       <div className=" mt-6 pt-4 w-full flex justify-between items-center mb-10 border-2 border-transparent">
-        <LoginBtn
-          text="LOGOUT"
+        <button
+          className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-700 text-white font-bold tracking-widest text-lg shadow"
           onClick={() => {
             localStorage.removeItem("token");
             navigate("/");
+            window.location.reload();
           }}
-        />
+        >
+          LOGOUT
+        </button>
       </div>
     </aside>
   );

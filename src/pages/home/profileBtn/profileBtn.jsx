@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
-
+import LoginModal from "../../../components/LoginModal";
 
 export default function ProfileBtn({ onClick }) {
   const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState("/user-profile-icon.svg");
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -26,7 +27,7 @@ export default function ProfileBtn({ onClick }) {
   const handleClick = () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/login");
+      setShowLogin(true);
       return;
     }
     if (onClick) {
@@ -37,13 +38,16 @@ export default function ProfileBtn({ onClick }) {
   };
 
   return (
-    <button
-      className="w-[40vw] h-[8.2vh] flex justify-end items-center cursor-pointer"
-      onClick={handleClick}
-    >
-      <div className="  w-[4vw] h-[4vw] flex justify-end gap-5 items-center">
-        <img src={profilePic} alt="profile" className="mr-2 w-[3vw] h-[3vw] rounded-full object-cover" />
-      </div>
-    </button>
+    <>
+      <button
+        className="w-[40vw] h-[8.2vh] flex justify-end items-center cursor-pointer"
+        onClick={handleClick}
+      >
+        <div className="w-[4vw] h-[4vw] flex justify-end gap-5 items-center">
+          <img src={profilePic} alt="profile" className="mr-2 w-[3vw] h-[3vw] rounded-full object-cover" />
+        </div>
+      </button>
+      <LoginModal open={showLogin} onClose={() => setShowLogin(false)} />
+    </>
   );
 }

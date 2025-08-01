@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+
 
 export default function PostDetail() {
   const { id } = useParams();
@@ -15,6 +16,8 @@ export default function PostDetail() {
   const [likeLoading, setLikeLoading] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [shareMsg, setShareMsg] = useState("");
+  const [updateWave, setUpdateWave] = useState(false);
+  const [deleteWave, setDeleteWave] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -134,6 +137,18 @@ export default function PostDetail() {
       navigator.clipboard.writeText(data.shareUrl);
       setTimeout(() => setShareMsg(""), 2000);
     }
+  };
+
+  // Animation helpers
+  const triggerUpdateWave = () => {
+    setUpdateWave(true);
+    setTimeout(() => setUpdateWave(false), 500);
+    setEditMode(true);
+  };
+  const triggerDeleteWave = () => {
+    setDeleteWave(true);
+    setTimeout(() => setDeleteWave(false), 500);
+    handleDelete();
   };
 
   if (loading) {
@@ -260,20 +275,24 @@ export default function PostDetail() {
                 )}
               </div>
               {(isAuthor || isAdmin) && (
-                <button
-                  className="mt-4 px-4 py-2 bg-red-600 text-white rounded w-full border-2 border-red-700 hover:bg-red-700 transition"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </button>
-              )}
-              {(isAuthor || isAdmin) && (
-                <button
-                  className="mt-6 px-4 py-2 h-full bg-yellow-500 text-white rounded w-full border-2 border-yellow-600 hover:bg-yellow-600 transition"
-                  onClick={() => setEditMode(true)}
-                >
-                  Update
-                </button>
+                <div className="flex gap-2 mt-6">
+                  <button
+                    className={`px-3 py-1 bg-yellow-500 text-white rounded border-2 border-yellow-600 hover:bg-yellow-600 transition text-sm font-semibold shadow wave-btn${updateWave ? " wave-animate" : ""}`}
+                    style={{ minWidth: 0, width: "100px", position: "relative" }}
+                    onClick={triggerUpdateWave}
+                  >
+                    Update
+                    <span className="wave"></span>
+                  </button>
+                  <button
+                    className={`px-3 py-1 bg-red-600 text-white rounded border-2 border-red-700 hover:bg-red-700 transition text-sm font-semibold shadow wave-btn${deleteWave ? " wave-animate" : ""}`}
+                    style={{ minWidth: 0, width: "100px", position: "relative" }}
+                    onClick={triggerDeleteWave}
+                  >
+                    Delete
+                    <span className="wave"></span>
+                  </button>
+                </div>
               )}
             </>
           )}

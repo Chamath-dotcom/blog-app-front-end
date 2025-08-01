@@ -1,0 +1,27 @@
+/* Wave animation for small buttons */
+.wave-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.wave-btn .wave {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.3);
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: width 0.5s, height 0.5s, opacity 0.5s;
+}
+
+.wave-btn.wave-animate .wave {
+  width: 200px;
+  height: 200px;
+  opacity: 1;
+  transition: 0s;
+}

@@ -34,7 +34,7 @@ export default function PostList() {
 
   return (
     <div
-      className="w-full h-full max-w-4xl mx-auto flex flex-col gap-8 z-999 overflow-y-visible relative top-[50vh]"
+      className="w-full h-full max-w-4xl mx-auto flex flex-col gap-8 z-20 overflow-y-visible relative top-[50vh]"
       style={{
         height: "calc(100vh - 40vh)",
         minHeight: 0,
