@@ -135,6 +135,16 @@ export default function UserStatus({ author }) {
     }
   };
 
+  // Get logged-in user's email for comparison
+  const token = localStorage.getItem("token");
+  let loggedInEmail = null;
+  if (token) {
+    try {
+      const decoded = jwtDecode(token);
+      loggedInEmail = decoded.email;
+    } catch {}
+  }
+
   if (!user) {
     if (author) {
       return (
@@ -273,18 +283,21 @@ export default function UserStatus({ author }) {
           <span>Following: {following.length}</span>
         </div>
       </div>
-      <div className=" mt-6 pt-4 w-full flex justify-between items-center mb-10 border-2 border-transparent">
-        <button
-          className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-700 text-white font-bold tracking-widest text-lg shadow"
-          onClick={() => {
-            localStorage.removeItem("token");
-            navigate("/");
-            window.location.reload();
-          }}
-        >
-          LOGOUT
-        </button>
-      </div>
+      {/* Only show logout if viewing own profile */}
+      {!author && (
+        <div className="mt-6 pt-4 w-full flex justify-between items-center mb-10 border-2 border-transparent">
+          <button
+            className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-700 text-white font-bold tracking-widest text-lg shadow"
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/");
+              window.location.reload();
+            }}
+          >
+            LOGOUT
+          </button>
+        </div>
+      )}
     </aside>
   );
 }
