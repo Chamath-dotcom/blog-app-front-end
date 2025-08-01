@@ -1,6 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { AiFillLike } from "react-icons/ai";
+import { FaLink } from "react-icons/fa6";
+import { MdEditNote } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 
 
 export default function PostDetail() {
@@ -29,7 +33,7 @@ export default function PostDetail() {
         setEditContent(data.content);
         setLoading(false);
 
-        // Check if current user is author or admin
+       
         const token = localStorage.getItem("token");
         if (token) {
           const decoded = jwtDecode(token);
@@ -139,7 +143,7 @@ export default function PostDetail() {
     }
   };
 
-  // Animation helpers
+  
   const triggerUpdateWave = () => {
     setUpdateWave(true);
     setTimeout(() => setUpdateWave(false), 500);
@@ -160,12 +164,12 @@ export default function PostDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
-      <article className="w-full max-w-3xl bg-white mx-auto shadow-lg rounded-xl">
+    <div className="min-h-screen bg-[#50535c] flex flex-col items-center">
+      <article className="w-full max-w-3xl bg-[#b0c3ca] mx-auto shadow-lg rounded-xl">
         {/* User Name Above Post */}
         <div className="px-8 pt-8 pb-2 flex items-center gap-3">
           <span
-            className="text-lg font-semibold text-blue-700 hover:underline cursor-pointer"
+            className="text-lg font-semibold text-[#444] hover:underline cursor-pointer"
             onClick={() => navigate(`/profile/${encodeURIComponent(post.author)}`)}
           >
             {post.author || "Unknown"}
@@ -222,7 +226,7 @@ export default function PostDetail() {
             <>
               <h1 className="text-4xl font-extrabold mb-4 text-gray-900">{post.title}</h1>
               <div className="flex items-center gap-4 mb-8">
-                <span className="text-gray-400 text-sm">{new Date(post.createdAt).toLocaleString()}</span>
+                <span className="text-gray-500 text-sm">{new Date(post.createdAt).toLocaleString()}</span>
               </div>
               <div className="prose max-w-none text-lg text-gray-800 leading-relaxed whitespace-pre-line">
                 {post.content}
@@ -234,16 +238,18 @@ export default function PostDetail() {
                   onClick={handleLike}
                   disabled={likeLoading}
                 >
-                  👍 <span>{Array.isArray(post.likes) ? post.likes.length : post.likes || 0}</span>
+                <AiFillLike />
+                  <span>{Array.isArray(post.likes) ? post.likes.length : post.likes || 0}</span>
                 </button>
                 <button
-                  className="flex items-center gap-1 text-gray-600 hover:text-green-600"
+                  className="flex items-center gap-1 text-gray-600 hover:text-[#131313]"
                   onClick={handleShare}
                 >
-                  🔗 <span>Share</span>
+                  <FaLink />
+                 <span>Share</span>
                 </button>
                 {shareMsg && (
-                  <span className="text-green-600 ml-2">{shareMsg}</span>
+                  <span className="text-[#4d4d4d] ml-2">{shareMsg}</span>
                 )}
               </div>
               {/* Comment Input */}
@@ -277,19 +283,19 @@ export default function PostDetail() {
               {(isAuthor || isAdmin) && (
                 <div className="flex gap-2 mt-6">
                   <button
-                    className={`px-3 py-1 bg-yellow-500 text-white rounded border-2 border-yellow-600 hover:bg-yellow-600 transition text-sm font-semibold shadow wave-btn${updateWave ? " wave-animate" : ""}`}
-                    style={{ minWidth: 0, width: "100px", position: "relative" }}
+                    className={` p-3 bg-[#d8d8d8] text-black rounded   hover:bg-gray-500 transition hover:text-white   shadow wave-btn${updateWave ? " wave-animate" : ""}`}
+                    style={{ minWidth: 0, width: "50px", position: "relative" , fontSize:"30px"}}
                     onClick={triggerUpdateWave}
                   >
-                    Update
+                  <MdEditNote />
                     <span className="wave"></span>
                   </button>
                   <button
-                    className={`px-3 py-1 bg-red-600 text-white rounded border-2 border-red-700 hover:bg-red-700 transition text-sm font-semibold shadow wave-btn${deleteWave ? " wave-animate" : ""}`}
-                    style={{ minWidth: 0, width: "100px", position: "relative" }}
+                    className={`p-3 bg-[#d8d8d8] text-black rounded   hover:bg-gray-500  hover:text-white transition text-sm font-semibold shadow wave-btn${deleteWave ? " wave-animate" : ""}`}
+                    style={{ minWidth: 0, width: "50px", position: "relative" , fontSize:"30px" }}
                     onClick={triggerDeleteWave}
                   >
-                    Delete
+                    <MdDelete />
                     <span className="wave"></span>
                   </button>
                 </div>

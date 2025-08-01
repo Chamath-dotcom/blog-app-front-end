@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AiFillLike } from "react-icons/ai";
+import { FaLink } from "react-icons/fa6";
+import { MdEditNote } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { FaComment } from "react-icons/fa";
+
 
 export default function PostList() {
   const [posts, setPosts] = useState([]);
@@ -34,7 +40,7 @@ export default function PostList() {
 
   return (
     <div
-      className="w-full h-full max-w-4xl mx-auto flex flex-col gap-8 z-20 overflow-y-visible relative top-[50vh]"
+      className="w-[100vw] h-full max-w-4xl mx-auto flex flex-col gap-8 z-20 overflow-y-visible relative top-[50vh]  "
       style={{
         height: "calc(100vh - 40vh)",
         minHeight: 0,
@@ -43,7 +49,7 @@ export default function PostList() {
       {posts.map(post => (
         <div
           key={post._id}
-          className="flex flex-row bg-[#b3b8b2] rounded-xl shadow p-6 items-center gap-6 hover:shadow-lg transition cursor-pointer"
+          className="flex flex-row bg-[#b0c3ca] rounded-xl shadow p-6 items-center gap-6 hover:shadow-lg transition cursor-pointer"
           onClick={() => navigate(`/post/${post._id}`)}
         >
           {/* Left: Post Info */}
@@ -58,10 +64,10 @@ export default function PostList() {
             {/* Description */}
             <p className="text-gray-700 mb-2 line-clamp-2">{post.content}</p>
             {/* Like, Comment, Share Counts */}
-            <div className="flex items-center gap-6 mt-2 text-sm text-[#1f1436]">
-              <span>👍 {Array.isArray(post.likes) ? post.likes.length : post.likes || 0}</span>
-              <span>💬 {post.comments ? post.comments.length : 0}</span>
-              <span>🔗 {post.shares ? post.shares.length : 0}</span>
+            <div className="flex flex-row items-center gap-6 mt-2 text-sm text-[#1f1436]">
+              <AiFillLike/><span className="relative right-4">{Array.isArray(post.likes) ? post.likes.length : post.likes || 0}</span>
+              <FaComment /><span className="relative right-4"> {post.comments ? post.comments.length : 0}</span>
+              <FaLink/><span className="relative right-4"> {post.shares ? post.shares.length : 0}</span>
             </div>
             {/* Date */}
             <span className="text-xs text-[#1f1436] mt-2">
@@ -70,7 +76,7 @@ export default function PostList() {
           </div>
           {/* Right: Image */}
           {post.image && (
-            <div className="flex-shrink-0 w-40 h-28 ml-4 rounded overflow-hidden border">
+            <div className="flex-shrink-0 w-40 h-28 ml-4 rounded-2xl overflow-hidden ">
               <img
                 src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${post.image}`}
                 alt="Post"

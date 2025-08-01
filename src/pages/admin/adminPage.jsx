@@ -15,19 +15,8 @@ export default function AdminPage() {
     <div className="w-full h-screen flex overflow-hidden backg ">
       <div className="w-[4vw] h-full  flex flex-col justify-start  items-center text-[20px] gap-3 backdrop-blur-2xl z-20">
 
-        <Link to="/admin/" className="mt-6 " data-tooltip-id="dashboard-tooltip">
-            <div className="icon duration-600">
-                <MdDashboard />
-            </div>
-        </Link>
-        <Tooltip id="dashboard-tooltip" place="right" content="Go to Dashboard" />
-
-        <Link to="/admin/bookings"  data-tooltip-id="bookings-tooltip">
-            <div className=" icon duration-600">
-                <FaSwatchbook />
-            </div>
-        </Link>
-        <Tooltip id="bookings-tooltip" place="right" content="View Bookings" />
+       
+       
 
         <Link to="/admin/items"  data-tooltip-id="items-tooltip">
             <div className=" icon duration-600">

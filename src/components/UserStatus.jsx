@@ -258,7 +258,8 @@ export default function UserStatus({ author }) {
         >
           Edit profile
         </button>
-        <AddPostButton />
+        {/* Remove AddPostButton for author profile */}
+        {!author && <AddPostButton />}
         {author && (
           <div className="my-2">
             {isFollowing ? (

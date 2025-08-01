@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { AiFillLike } from "react-icons/ai";
+import { FaLink } from "react-icons/fa6";
+import { MdEditNote } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { FaComment } from "react-icons/fa";
 
 export default function MyPost({ author }) {
   const [posts, setPosts] = useState([]);
@@ -52,9 +57,9 @@ export default function MyPost({ author }) {
             <h2 className="text-2xl font-bold mb-1 text-[#fff]">{post.title}</h2>
             <p className="text-[#fff] mb-2 line-clamp-2">{post.content}</p>
             <div className="flex items-center gap-6 mt-2 text-sm text-[#fff]">
-              <span>👍 {Array.isArray(post.likes) ? post.likes.length : post.likes || 0}</span>
-              <span>💬 {post.comments ? post.comments.length : 0}</span>
-              <span>🔗 {post.shares ? post.shares.length : 0}</span>
+              <AiFillLike/><span className="relative right-4">{Array.isArray(post.likes) ? post.likes.length : post.likes || 0}</span>
+              <FaComment/><span className="relative right-4"> {post.comments ? post.comments.length : 0}</span>
+              <FaLink/><span className="relative right-4"> {post.shares ? post.shares.length : 0}</span>
             </div>
             <span className="text-xs text-gray-400 mt-2">
               {new Date(post.createdAt).toLocaleDateString()}

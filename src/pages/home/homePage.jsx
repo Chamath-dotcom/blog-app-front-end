@@ -9,8 +9,9 @@ export default function HomePage() {
     <div>
     <div className="flex flex-col items-center bg-[#1f1436] w-[100vw] h-[400vh]">
       <Hero />
+      <div className="w-[100vw] bg-[#1f1436]">
       <PostList /> {/* <-- Add here */}
-    
+      </div>
     </div>
       <Footer/>
     </div>
